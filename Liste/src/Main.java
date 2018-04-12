@@ -1,3 +1,5 @@
+import jdk.management.resource.internal.inst.FileOutputStreamRMHooks;
+
 import java.io.*;
 import java.util.*;
 
@@ -5,6 +7,10 @@ import java.util.*;
  * Created by RenCh1732786 on 2018-01-22.
  */
 public class Main {
+
+    public static String[] listePays= new String[]{"CANADA", "ÉTATS-UNIS", "MEXIQUE", "FRANCE", "ALLEMAGNE", "YOUGOSLAVIE", "ZIMBABWE"};
+    public static String[] listeProvince= new String[]{"QUÉBEC", "ONTARIO", "MANITOBA", "COLOMBIE-BRITANNIQUE", "ALBERTA", "SASKATCHEWAN"};
+
     public static void main(String[] args) {
 
         boolean programme=true;
@@ -115,6 +121,51 @@ public class Main {
         }
     }
 
+    public static int verifyPays(String pays){
+        pays = pays.toUpperCase();
+        int ok=0;
+        for (int i=0; i<listePays.length; i++){
+            if (pays.equals(listePays[i])){
+                ok=1;
+            }
+        }
+        if (pays.equals("CANADA")){
+            ok=2;
+        }
+        return ok;
+    }
+
+    public static boolean verifyProvince(String province){
+        province = province.toUpperCase();
+        boolean ok=false;
+        for (int i=0; i<listeProvince.length; i++){
+            if (province.equals(listeProvince[i])){
+                ok=true;
+            }
+        }
+        return ok;
+    }
+
+    public static boolean verifyTelephone(String telephone){
+        boolean ok=true;
+        if (telephone.length()!=12){
+            ok=false;
+        }
+        for (int i=0; i<telephone.length()-1; i++){
+            if (i==3 || i==7){
+                if (telephone.charAt(i)!='-'){
+                    ok=false;
+                }
+            }
+            else{
+                if ((int)telephone.charAt(i)<46 || (int)telephone.charAt(i)>57){
+                    ok=false;
+                }
+            }
+        }
+        return ok;
+    }
+
 
 
     public static HashMap<String, Contact> chargerMap(){
@@ -196,8 +247,13 @@ public class Main {
             if (decider=='o') {
                 System.out.println("");
                 telephoneHypothetique=nouveauContact.ajouterTelephone();
-                nouveauContact.getListeTelephone().add(nouveauContact.getNombreTelephones(), telephoneHypothetique);
-                nouveauContact.setNombreTelephones();
+                if (verifyTelephone(telephoneHypothetique.getNumero())){
+                    nouveauContact.getListeTelephone().add(nouveauContact.getNombreTelephones(), telephoneHypothetique);
+                    nouveauContact.setNombreTelephones();
+                }
+                else{
+                    System.out.println("Erreur dans le format de votre numéro de téléphone");
+                }
             }
             else if (decider!='o' && decider!='n'){
                 System.out.println("erreur");
@@ -282,16 +338,44 @@ public class Main {
             if (!chaine.equals("")) {
                 liste.get(cle).getAdresse().setVille(chaine);
             }
-            System.out.println("  Province : (" + liste.get(cle).getAdresse().getProvince() + ")");
-            chaine = sc.nextLine().trim();
-            if (!chaine.equals("")) {
-                liste.get(cle).getAdresse().setProvince(chaine);
-            }
-            System.out.println("  Pays : (" + liste.get(cle).getAdresse().getPays() + ")");
-            chaine = sc.nextLine().trim();
-            if (!chaine.equals("")) {
-                liste.get(cle).getAdresse().setPays(chaine);
-            }
+                boolean ok =false;
+                while (!ok){
+                    System.out.println("  Pays : (" + liste.get(cle).getAdresse().getPays() + ")");
+                    chaine = sc.nextLine().trim();
+                    if (!chaine.equals("")) {
+                        String pays=chaine;
+                        int option = Main.verifyPays(pays);
+                        if (option==0){
+                            System.out.println("Erreur, ce pays n'existe pas");
+                        }
+                        if (option==2){
+                            liste.get(cle).getAdresse().setPays(pays);
+                            ok=true;
+                            boolean ok2=false;
+                            while(!ok2){
+                                System.out.println("  Province : (" + liste.get(cle).getAdresse().getProvince() + ")");
+                                chaine = sc.nextLine().trim();
+                                if (!chaine.equals("")) {
+                                    System.out.println("  Province : ");
+                                    String province =chaine;
+                                    if (Main.verifyProvince(province)){
+                                        liste.get(cle).getAdresse().setProvince(province);
+                                        ok2=true;
+                                    }
+                                    else{
+                                        System.out.println("Cette province n'existe pas");
+                                    }
+                                    liste.get(cle).getAdresse().setProvince(chaine);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            liste.get(cle).getAdresse().setPays(pays);
+                            ok=true;
+                        }
+                    }
+                }
             System.out.println("Occupation : ");
             System.out.println("  Poste : (" + liste.get(cle).getOccupation().getPoste() + ")");
             chaine = sc.nextLine().trim();
@@ -325,15 +409,43 @@ public class Main {
             if (!chaine.equals("")) {
                 liste.get(cle).getOccupation().getEntreprise().getAdresse().setVille(chaine);
             }
-            System.out.println("      Province : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getProvince() + ")");
-            chaine = sc.nextLine().trim();
-            if (!chaine.equals("")) {
-                liste.get(cle).getOccupation().getEntreprise().getAdresse().setProvince(chaine);
-            }
-            System.out.println("      Pays : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getPays() + ")");
-            chaine = sc.nextLine().trim();
-            if (!chaine.equals("")) {
-                liste.get(cle).getOccupation().getEntreprise().getAdresse().setPays(chaine);
+            boolean ok5 =false;
+            while (!ok5){
+                System.out.println("  Pays : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getPays() + ")");
+                chaine = sc.nextLine().trim();
+                if (!chaine.equals("")) {
+                    String pays=chaine;
+                    int option = Main.verifyPays(pays);
+                    if (option==0){
+                        System.out.println("Erreur, ce pays n'existe pas");
+                    }
+                    if (option==2){
+                        liste.get(cle).getOccupation().getEntreprise().getAdresse().setPays(pays);
+                        ok5=true;
+                        boolean ok6=false;
+                        while(!ok6){
+                            System.out.println("  Province : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getProvince() + ")");
+                            chaine = sc.nextLine().trim();
+                            if (!chaine.equals("")) {
+                                System.out.println("  Province : ");
+                                String province =chaine;
+                                if (Main.verifyProvince(province)){
+                                    liste.get(cle).getOccupation().getEntreprise().getAdresse().setProvince(province);
+                                    ok6=true;
+                                }
+                                else{
+                                    System.out.println("Cette province n'existe pas");
+                                }
+                                liste.get(cle).getOccupation().getEntreprise().getAdresse().setProvince(chaine);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        liste.get(cle).getAdresse().setPays(pays);
+                        ok5=true;
+                    }
+                }
             }
             System.out.println("");
             System.out.println("Téléphones");
@@ -356,8 +468,13 @@ public class Main {
                 if (decider == 'o') {
                     System.out.println("");
                     telephoneHypothetique = liste.get(cle).ajouterTelephone();
-                    liste.get(cle).getListeTelephone().add(liste.get(cle).getNombreTelephones(), telephoneHypothetique);
-                    liste.get(cle).setNombreTelephones();
+                    if (verifyTelephone(telephoneHypothetique.getNumero())){
+                        liste.get(cle).getListeTelephone().add(liste.get(cle).getNombreTelephones(), telephoneHypothetique);
+                        liste.get(cle).setNombreTelephones();
+                    }
+                    else{
+                        System.out.println("Erreur dans le format de votre numéro de téléphone");
+                    }
                 } else if (decider != 'o' && decider != 'n') {
                     System.out.println("erreur");
                 }

@@ -77,11 +77,36 @@ public class Adresse implements Serializable {
         nouvelleAdresse.setAppartement(sc.next());
         System.out.println("  Ville : ");
         nouvelleAdresse.setVille(sc.next());
-        System.out.println("  Province : ");
-        nouvelleAdresse.setProvince(sc.next());
         System.out.println("  Pays : ");
-        nouvelleAdresse.setPays(sc.next());
-
+        boolean ok =false;
+        while (!ok){
+            String pays=sc.next();
+            int option = Main.verifyPays(pays);
+            if (option==0){
+                System.out.println("Erreur, ce pays n'existe pas");
+            }
+            if (option==2){
+                nouvelleAdresse.setPays(pays);
+                ok=true;
+                boolean ok2=false;
+                while(!ok2){
+                    System.out.println("  Province : ");
+                    String province =sc.next();
+                    if (Main.verifyProvince(province)){
+                        nouvelleAdresse.setProvince(province);
+                        ok2=true;
+                    }
+                    else{
+                        System.out.println("Cette province n'existe pas");
+                    }
+                }
+            }
+            else
+            {
+                nouvelleAdresse.setPays(pays);
+                ok=true;
+            }
+        }
         return nouvelleAdresse;
     }
 
@@ -94,4 +119,6 @@ public class Adresse implements Serializable {
         System.out.println("  Province : "+this.province);
         System.out.println("  Pays : "+this.pays);
     }
+
+
 }
