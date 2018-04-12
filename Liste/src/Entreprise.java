@@ -31,7 +31,7 @@ public class Entreprise implements Serializable {
 
         System.out.println("Entreprise : ");
         System.out.println("Nom :");
-        nouvelleEntreprise.setNom(sc.next());
+        nouvelleEntreprise.setNom(Main.verifyString(sc.next(), sc));
 
         nouvelleEntreprise.setAdresse(new Adresse());
         nouvelleEntreprise.setAdresse(getAdresse().ajouterAdresse());

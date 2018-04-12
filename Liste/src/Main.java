@@ -121,6 +121,26 @@ public class Main {
         }
     }
 
+    public static String verifyString(String chaine, Scanner sc){
+        boolean fin =false;
+        while (!fin){
+            boolean ok=true;
+            for (int i=0; i<chaine.length();i++){
+                if (chaine.charAt(i)=='$' || chaine.charAt(i)=='%' || chaine.charAt(i)=='\\' || chaine.charAt(i)=='/' || chaine.charAt(i)=='*' || chaine.charAt(i)=='@' || chaine.charAt(i)=='?'){
+                    ok=false;
+                }
+            }
+            if (!ok){
+                System.out.println("Réessayez svp (Veuillez ne pas entrer de caractères spéciaux)");
+                chaine=sc.next();
+            }
+            else{
+                return chaine;
+        }
+    }
+        return chaine;
+    }
+
     public static int verifyPays(String pays){
         pays = pays.toUpperCase();
         int ok=0;
@@ -179,10 +199,10 @@ public class Main {
                 list = (HashMap<String, Contact>) entree.readObject();
                 entree.close();
             }catch (Exception ex){
-                System.out.println("impossible de lire ce fichier 1");
+                System.out.println("impossible de lire ce fichier");
             }
         }catch(Exception ex){
-            System.out.println("impossible de lire ce fichier 2");
+            System.out.println("impossible de lire ce fichier");
         }
         return list;
     }
@@ -198,10 +218,10 @@ public class Main {
                 queue = (Queue<String>) entree.readObject();
                 entree.close();
             }catch (Exception ex){
-                System.out.println("impossible de lire ce fichier 3");
+                System.out.println("impossible de lire ce fichier");
             }
         }catch(Exception ex){
-            System.out.println("impossible de lire ce fichier 4");
+            System.out.println("impossible de lire ce fichier");
         }
         return queue;
     }
@@ -234,9 +254,9 @@ public class Main {
 
         System.out.println("Veuillez entrer les informations suivantes");
         System.out.println("Prénom : ");
-        nouveauContact.setPrenom(sc.next());
+        nouveauContact.setPrenom(verifyString(sc.next(), sc));
         System.out.println("Nom : ");
-        nouveauContact.setNom(sc.next());
+        nouveauContact.setNom(verifyString(sc.next(), sc));
         nouveauContact.setAdresse(nouveauContact.getAdresse().ajouterAdresse());
         nouveauContact.setOccupation(nouveauContact.getOccupation().ajouterOccupation());
 
@@ -304,8 +324,7 @@ public class Main {
 
             System.out.println("Veuillez entrer les informations suivantes");
             System.out.println("Prénom : (" + liste.get(cle).getPrenom() + ")");
-            chaine = sc.nextLine().trim();
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).setPrenom(chaine);
                 liste.put(chaine, liste.get(cle));
@@ -313,48 +332,48 @@ public class Main {
                 cle=chaine;
             }
             System.out.println("Nom : (" + liste.get(cle).getNom() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).setNom(chaine);
             }
             System.out.println("Adresse : ");
             System.out.println("  Numéro de porte : (" + liste.get(cle).getAdresse().getNumeroPorte() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getAdresse().setNumeroPorte(chaine);
             }
             System.out.println("  Rue : (" + liste.get(cle).getAdresse().getRue() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getAdresse().setRue(chaine);
             }
             System.out.println("  Appartement (facultatif) : (" + liste.get(cle).getAdresse().getAppartement() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getAdresse().setAppartement(chaine);
             }
             System.out.println("  Ville : (" + liste.get(cle).getAdresse().getVille() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getAdresse().setVille(chaine);
             }
                 boolean ok =false;
                 while (!ok){
                     System.out.println("  Pays : (" + liste.get(cle).getAdresse().getPays() + ")");
-                    chaine = sc.nextLine().trim();
+                    chaine = verifyString(sc.nextLine().trim(), sc);
                     if (!chaine.equals("")) {
                         String pays=chaine;
                         int option = Main.verifyPays(pays);
                         if (option==0){
                             System.out.println("Erreur, ce pays n'existe pas");
                         }
-                        if (option==2){
+                        else if (option==2){
                             liste.get(cle).getAdresse().setPays(pays);
                             ok=true;
                             boolean ok2=false;
                             while(!ok2){
                                 System.out.println("  Province : (" + liste.get(cle).getAdresse().getProvince() + ")");
-                                chaine = sc.nextLine().trim();
+                                chaine = verifyString(sc.nextLine().trim(), sc);
                                 if (!chaine.equals("")) {
                                     System.out.println("  Province : ");
                                     String province =chaine;
@@ -375,57 +394,60 @@ public class Main {
                             ok=true;
                         }
                     }
+                    else {
+                        ok=true;
+                    }
                 }
             System.out.println("Occupation : ");
             System.out.println("  Poste : (" + liste.get(cle).getOccupation().getPoste() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getOccupation().setPoste(chaine);
             }
             System.out.println("  Entreprise : ");
             System.out.println("    Nom : (" + liste.get(cle).getOccupation().getEntreprise().getNom() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getOccupation().getEntreprise().setNom(chaine);
             }
             System.out.println("    Adresse : ");
             System.out.println("      Numéro de porte : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getNumeroPorte() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getOccupation().getEntreprise().getAdresse().setNumeroPorte(chaine);
             }
             System.out.println("      Rue : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getRue() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getOccupation().getEntreprise().getAdresse().setRue(chaine);
             }
             System.out.println("      Appartement : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getNumeroPorte() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getOccupation().getEntreprise().getAdresse().setAppartement(chaine);
             }
             System.out.println("      Ville : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getVille() + ")");
-            chaine = sc.nextLine().trim();
+            chaine = verifyString(sc.nextLine().trim(), sc);
             if (!chaine.equals("")) {
                 liste.get(cle).getOccupation().getEntreprise().getAdresse().setVille(chaine);
             }
             boolean ok5 =false;
             while (!ok5){
                 System.out.println("  Pays : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getPays() + ")");
-                chaine = sc.nextLine().trim();
+                chaine = verifyString(sc.nextLine().trim(), sc);
                 if (!chaine.equals("")) {
                     String pays=chaine;
                     int option = Main.verifyPays(pays);
                     if (option==0){
                         System.out.println("Erreur, ce pays n'existe pas");
                     }
-                    if (option==2){
+                    else if (option==2){
                         liste.get(cle).getOccupation().getEntreprise().getAdresse().setPays(pays);
                         ok5=true;
                         boolean ok6=false;
                         while(!ok6){
                             System.out.println("  Province : (" + liste.get(cle).getOccupation().getEntreprise().getAdresse().getProvince() + ")");
-                            chaine = sc.nextLine().trim();
+                            chaine = verifyString(sc.nextLine().trim(), sc);
                             if (!chaine.equals("")) {
                                 System.out.println("  Province : ");
                                 String province =chaine;
@@ -445,6 +467,9 @@ public class Main {
                         liste.get(cle).getAdresse().setPays(pays);
                         ok5=true;
                     }
+                }
+                else {
+                    ok5=true;
                 }
             }
             System.out.println("");

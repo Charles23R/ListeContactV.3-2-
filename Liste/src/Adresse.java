@@ -70,22 +70,23 @@ public class Adresse implements Serializable {
 
         System.out.println("Adresse : ");
         System.out.println("  Numéro de porte : ");
-        nouvelleAdresse.setNumeroPorte(sc.next());
+        nouvelleAdresse.setNumeroPorte(Main.verifyString(sc.next(), sc));
         System.out.println("  Rue : ");
-        nouvelleAdresse.setRue(sc.next());
+        nouvelleAdresse.setRue(Main.verifyString(sc.next(), sc));
         System.out.println("  Appartement (facultatif) : ");
-        nouvelleAdresse.setAppartement(sc.next());
+        nouvelleAdresse.setAppartement(Main.verifyString(sc.next(), sc));
         System.out.println("  Ville : ");
-        nouvelleAdresse.setVille(sc.next());
-        System.out.println("  Pays : ");
+        nouvelleAdresse.setVille(Main.verifyString(sc.next(), sc));
         boolean ok =false;
         while (!ok){
+            System.out.println("  Pays : ");
             String pays=sc.next();
             int option = Main.verifyPays(pays);
             if (option==0){
                 System.out.println("Erreur, ce pays n'existe pas");
+                ok=false;
             }
-            if (option==2){
+            else if (option==2){
                 nouvelleAdresse.setPays(pays);
                 ok=true;
                 boolean ok2=false;

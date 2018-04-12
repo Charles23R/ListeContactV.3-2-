@@ -68,7 +68,7 @@ public class Contact implements Serializable{
         Scanner sc=new Scanner(System.in);
         Telephone telephone=new Telephone();
         System.out.println("À quoi correspond ce numéro ? (cellulaire, maison, travail...)");
-        telephone.setInfo(sc.next());
+        telephone.setInfo(Main.verifyString(sc.next(), sc));
         System.out.println("Quel est le numéro?");
         telephone.setNumero(sc.next());
         return telephone;

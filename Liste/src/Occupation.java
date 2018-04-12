@@ -30,7 +30,7 @@ public class Occupation implements Serializable {
 
         System.out.println("Occupation");
         System.out.println("  Poste : ");
-        nouvelleOccupation.setPoste(sc.next());
+        nouvelleOccupation.setPoste(Main.verifyString(sc.next(), sc));
 
         nouvelleOccupation.setEntreprise(new Entreprise());
         nouvelleOccupation.setEntreprise(getEntreprise().ajouterEntreprise());
